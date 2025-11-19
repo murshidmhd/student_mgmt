@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <h2 class="text-center mb-4">Welcome, {{ request.user.username }} 👋</h2>
+
+                <div class="list-group">
+
+                    <a href="{% url 'student_profile' %}" class="list-group-item list-group-item-action">
+                        📄 View My Profile
+                    </a>
+
+                    <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">
+                        🚪 Logout
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

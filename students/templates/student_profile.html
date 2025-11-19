@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="col-md-6 mx-auto">
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h3 class="text-center mb-4">My Profile</h3>
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Username</th>
+                    <td>{{ profile.user.username }}</td>
+                </tr>
+                <tr>
+                    <th>Roll Number</th>
+                    <td>{{ profile.roll_number }}</td>
+                </tr>
+                <tr>
+                    <th>Department</th>
+                    <td>{{ profile.department }}</td>
+                </tr>
+                <tr>
+                    <th>Year of Admission</th>
+                    <td>{{ profile.year_of_admission }}</td>
+                </tr>
+            </table>
+
+            <a href="{% url 'student_dashboard' %}" class="btn btn-primary w-100 mt-3">
+                Back to Dashboard
+            </a>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
