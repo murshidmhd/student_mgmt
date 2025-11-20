@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from students.models import StudentProfile
+from django.contrib.auth.decorators import login_required
+from accounts.decorators import admin_required
+from django.contrib.auth import authenticate, login, logout
+
+
 
 User = get_user_model()
 
@@ -43,11 +48,7 @@ def register_student(request):
     return render(request, "register_student.html")
 
 
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
 
-
-from django.contrib.auth import authenticate, login, logout
 
 
 def login_view(request):
@@ -72,7 +73,7 @@ def login_view(request):
     return render(request, "login.html")
 
 
-# @login_required
+@login_required
 def admin_dashboard(request):
     if request.user.role != "admin":
         messages.error(request, "Access denied.")
@@ -85,3 +86,12 @@ def logout_view(request):
     logout(request)
     messages.success(request, "Logged out successfully.")
     return redirect("login")
+
+
+@login_required
+@admin_required
+def admin_dashboard(request):
+    return render(request, "admin_dashboard.html")
+
+
+

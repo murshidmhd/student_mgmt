@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "students",
     "accounts",
+    "admins",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
@@ -78,16 +79,15 @@ WSGI_APPLICATION = "student_mgmt.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'student_mgmt',
-        'USER': 'postgres',
-        'PASSWORD': '786786ms',
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "student_mgmt",
+        "USER": "postgres",
+        "PASSWORD": "786786ms",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
-
 
 
 # Password validation
@@ -134,7 +134,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 
 MEDIA_URL = "/media/"

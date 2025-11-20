@@ -1,29 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}Student Dashboard{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-8 mx-auto">
+
+<h2>Welcome, {{ request.user.username }} 👋</h2>
+
+<div class="mt-4 row">
+
+    <!-- Profile photo section -->
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                {% if request.user.studentprofile.profile_image %}
+                    <img src="{{ request.user.studentprofile.profile_image.url }}" 
+                         class="img-thumbnail mb-3" 
+                         width="150" height="150">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" 
+                         class="img-thumbnail mb-3">
+                {% endif %}
+                <h5>{{ request.user.username }}</h5>
+                <p class="text-muted">{{ request.user.studentprofile.roll_number }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info section -->
+    <div class="col-md-8">
         <div class="card shadow-sm">
             <div class="card-body">
+                <h4>Your Information</h4>
+                <p><strong>Department:</strong> {{ request.user.studentprofile.department }}</p>
+                <p><strong>Year of Admission:</strong> {{ request.user.studentprofile.year_of_admission }}</p>
 
-                <h2 class="text-center mb-4">Welcome, {{ request.user.username }} 👋</h2>
-
-                <div class="list-group">
-
-                    <a href="{% url 'student_profile' %}" class="list-group-item list-group-item-action">
-                        📄 View My Profile
-                    </a>
-
-                    <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">
-                        🚪 Logout
-                    </a>
-
-                </div>
-
+                <a class="btn btn-primary mt-2" href="{% url 'student_profile' %}">
+                    View Full Profile
+                </a>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
