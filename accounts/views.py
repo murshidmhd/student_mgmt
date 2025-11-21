@@ -5,72 +5,66 @@ from students.models import StudentProfile
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import admin_required
 from django.contrib.auth import authenticate, login, logout
-
-
-
-User = get_user_model()
+from accounts.models import User
+from accounts.form import LoginForm, StudentRegisterForm
 
 
 def register_student(request):
+    form = StudentRegisterForm()
     if request.method == "POST":
+        form = StudentRegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
 
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        roll_number = request.POST.get("roll_number")
-        department = request.POST.get("department")
-        year = request.POST.get("year")
+            roll_number = form.cleaned_data["roll_number"]
+            department = form.cleaned_data["department"]
+            year = form.cleaned_data["year_of_admission"]
 
-        # Basic validation
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists.")
-            return redirect("register_student")
+            user = User(username=username, email=email, role="student")
+            user.set_password(password)
+            user.save()
 
-        if not year.isdigit():
-            messages.error(request, "Year must be a number.")
-            return redirect("register_student")
+            # manager object
+            StudentProfile.objects.create(
+                user=user,
+                roll_number=roll_number,
+                department=department,
+                year_of_admission=year,
+            )
 
-        year = int(year)
+            messages.success(request, "Registration successful! Please login.")
+            return redirect("login")
 
-        user = User.objects.create_user(
-            username=username, password=password, role="student"
-        )
-
-        StudentProfile.objects.create(
-            user=user,
-            roll_number=roll_number,
-            department=department,
-            year_of_admission=year,
-        )
-
-        messages.success(request, "Registration successful! Please login.")
-        return redirect("login")
-
-    return render(request, "register_student.html")
-
-
-
+    return render(request, "register_student.html", {"form": form})
 
 
 def login_view(request):
+    form = LoginForm()
+
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        form = LoginForm(request.POST)
+        if form.is_valid():
 
-        user = authenticate(request, username=username, password=password)
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
 
-        if user is None:
-            messages.error(request, "Invalid username or password.")
-            return redirect("login")
+            user = authenticate(request, username=username, password=password)
 
-        login(request, user)
-        messages.success(request, "Login successful!")
+        # if user is not None:
+        # messages.error(request, "Invalid username or password.")
+        # return redirect("login")
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, "Login successful!")
 
         if user.role == "admin":
             return redirect("admin_dashboard")
         else:
             return redirect("student_dashboard")
-
-    return render(request, "login.html")
+    return render(request, "login.html", {"form": form})
 
 
 @login_required
@@ -92,6 +86,3 @@ def logout_view(request):
 @admin_required
 def admin_dashboard(request):
     return render(request, "admin_dashboard.html")
-
-
-

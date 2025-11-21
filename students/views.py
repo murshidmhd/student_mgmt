@@ -14,7 +14,6 @@ def student_dashboard(request):
 @login_required
 # @student_required
 def student_profile(request):
-
     # we do in here is we just
     # after login in here we only get the name
     # so we look to the student profile and that obect we get the profile all data with user name

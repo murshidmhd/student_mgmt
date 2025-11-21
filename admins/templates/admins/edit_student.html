@@ -1,0 +1,33 @@
+{% extends "admins/base_admin.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Edit Student</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-control" name="username" value="{{ student.username }}">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" value="{{ student.email }}">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Department</label>
+        <input type="text" class="form-control" name="department" value="{{ profile.department }}">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Year</label>
+        <input type="text" class="form-control" name="year" value="{{ profile.year }}">
+    </div>
+
+    <button class="btn btn-success">Update</button>
+</form>
+
+{% endblock %}
