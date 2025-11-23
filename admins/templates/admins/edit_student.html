@@ -1,33 +1,39 @@
-{% extends "admins/base_admin.html" %}
-
+{% extends 'admins/base_admin.html'%}
+{% block title %} edit student {% endblock %}
 {% block content %}
 
-<h2 class="mb-4">Edit Student</h2>
+<div class="container mt-5">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
 
-<form method="POST">
-    {% csrf_token %}
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Edit Student
+                </h3>
 
-    <div class="mb-3">
-        <label class="form-label">Username</label>
-        <input type="text" class="form-control" name="username" value="{{ student.username }}">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <h5 class="fw-bold">Account Information</h5>
+                    {{ user_form.as_p }}
+
+                    <hr>
+
+                    <h5 class="fw-bold mt-3">Student Profile</h5>
+                    {{ profile_form.as_p }}
+
+                    <!-- {% if profile_form.instance.profile_image %}
+                    <img src="{{ profile_form.instance.profile_image.url }}" width="100" class="mb-2 rounded">
+                    {% endif %} -->
+
+                    <button class="btn btn-success w-100 fw-bold mt-3">
+                        Save Changes 
+                    </button>
+                </form>
+
+            </div>
+        </div>
     </div>
-
-    <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" name="email" value="{{ student.email }}">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Department</label>
-        <input type="text" class="form-control" name="department" value="{{ profile.department }}">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Year</label>
-        <input type="text" class="form-control" name="year" value="{{ profile.year }}">
-    </div>
-
-    <button class="btn btn-success">Update</button>
-</form>
+</div>
 
 {% endblock %}

@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import StudentProfile
 from accounts.decorators import student_required
-from django.contrib import messages
 
 
 @login_required
@@ -36,6 +35,5 @@ def edit_profile(request):
 
         profile.save()
 
-        messages.success(request, "profile updated successfully!")
         return redirect("student_profile")
     return render(request, "edit_profile.html", {"profile": profile})

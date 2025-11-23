@@ -1,0 +1,23 @@
+{%extends 'admins/base_admin.html'%}
+{%block title%} edit course {%endblock%}
+{%block content%} 
+<div class="container mt-5">
+    <div class="col-md-6 mx-auto">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+
+                <h3 class="fw-bold text-center mb-4 text-primary">Edit Course</h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-success w-100 fw-bold mt-3">
+                        Update Course
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

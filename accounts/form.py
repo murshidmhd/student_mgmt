@@ -1,6 +1,5 @@
 from django import forms
-
-# from students.models import StudentProfile
+from students.models import StudentProfile
 from .models import User
 
 
@@ -59,4 +58,40 @@ class StudentRegisterForm(forms.ModelForm):
             "password": forms.PasswordInput(
                 attrs={"class": "form-control", "placeholder": "Enter password"}
             ),
+        }
+
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "email"]
+
+        widgets = {
+            "username": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Enter username"}
+            ),
+            "email": forms.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Enter email"}
+            ),
+        }
+
+
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = StudentProfile
+        fields = ["roll_number", "department", "year_of_admission", "profile_image"]
+
+        widgets = {
+            "roll_number": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Enter Roll Number"}
+            ),
+            "department": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Enter Department"}
+            ),
+            "year_of_admission": forms.NumberInput(
+                attrs={"class": "form-control", "placeholder": "Enter Year"}
+            ),
+            "profile_image": forms.FileInput(attrs={"class": "form-control"}),
         }

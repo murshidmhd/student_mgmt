@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth import get_user_model
 from students.models import StudentProfile
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import admin_required
@@ -34,7 +32,6 @@ def register_student(request):
                 year_of_admission=year,
             )
 
-            messages.success(request, "Registration successful! Please login.")
             return redirect("login")
 
     return render(request, "register_student.html", {"form": form})
@@ -58,7 +55,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, "Login successful!")
+            # messages.success(request, "Login successful!")
 
         if user.role == "admin":
             return redirect("admin_dashboard")
@@ -70,7 +67,7 @@ def login_view(request):
 @login_required
 def admin_dashboard(request):
     if request.user.role != "admin":
-        messages.error(request, "Access denied.")
+        # messages.error(request, "Access denied.")
         return redirect("student_dashboard")
 
     return render(request, "admin_dashboard.html")
@@ -78,7 +75,7 @@ def admin_dashboard(request):
 
 def logout_view(request):
     logout(request)
-    messages.success(request, "Logged out successfully.")
+    # messages.success(request, "Logged out successfully.")
     return redirect("login")
 
 

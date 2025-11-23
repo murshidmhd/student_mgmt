@@ -1,0 +1,29 @@
+{% extends "admins/base_admin.html" %}
+{% block title %}Add Student{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    Add Student
+                </h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <button class="btn btn-success w-100 fw-bold mt-3">
+                        Add Student
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
