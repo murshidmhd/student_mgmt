@@ -5,6 +5,9 @@ from accounts.decorators import admin_required
 from django.contrib.auth import authenticate, login, logout
 from accounts.models import User
 from accounts.form import LoginForm, StudentRegisterForm
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def register_student(request):
@@ -32,6 +35,13 @@ def register_student(request):
                 year_of_admission=year,
             )
 
+            send_mail(
+                subject="Welcome to Student Portal",
+                message=f"Hello {username},\n\nYour student account has been created successfully.",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+            )
+
             return redirect("login")
 
     return render(request, "register_student.html", {"form": form})
@@ -49,25 +59,22 @@ def login_view(request):
 
             user = authenticate(request, username=username, password=password)
 
-        # if user is not None:
-        # messages.error(request, "Invalid username or password.")
-        # return redirect("login")
+            if user is None:
+                messages.error(request, "Invalid username or password")
+                return render(request, "login.html", {"form": form})
+            else:
+                login(request, user)
 
-        if user is not None:
-            login(request, user)
-            # messages.success(request, "Login successful!")
-
-        if user.role == "admin":
-            return redirect("admin_dashboard")
-        else:
-            return redirect("student_dashboard")
+                if user.role == "admin":
+                    return redirect("admin_dashboard")
+                else:
+                    return redirect("student_dashboard")
     return render(request, "login.html", {"form": form})
 
 
 @login_required
 def admin_dashboard(request):
     if request.user.role != "admin":
-        # messages.error(request, "Access denied.")
         return redirect("student_dashboard")
 
     return render(request, "admin_dashboard.html")

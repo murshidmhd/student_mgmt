@@ -1,45 +1,63 @@
 {% extends "base_student.html" %}
+{% load static %}
+
 
 {% block title %}Dashboard{% endblock %}
-
+    
 {% block content %}
 
-<h2>Welcome, {{ request.user.username }} 👋</h2>
+<h2 class="mb-4">Welcome, {{ request.user.username }} 👋</h2>
 
-<div class="mt-4 row">
+<div class="row">
 
-    <!-- Profile photo section -->
     <div class="col-md-4">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                {% if request.user.studentprofile.profile_image %}
-                    <img src="{{ request.user.studentprofile.profile_image.url }}" 
-                         class="img-thumbnail mb-3" 
-                         width="150" height="150">
-                {% else %}
-                    <img src="https://via.placeholder.com/150" 
-                         class="img-thumbnail mb-3">
-                {% endif %}
-                <h5>{{ request.user.username }}</h5>
-                <p class="text-muted">{{ request.user.studentprofile.roll_number }}</p>
-            </div>
+        <div class="card shadow-sm p-3 text-center">
+            {% csrf_token %}
+
+
+            {% if request.user.studentprofile.profile_image %}
+            <img src="{{ request.user.studentprofile.profile_image.url }}" class="rounded-circle mb-3" width="130"
+                height="130">
+            {% else %}
+            <img src="{% static 'images/default_profile.png' %}" class="rounded-circle mb-3" width="130" height="130">
+            {% endif %}
+
+
+
+            <h5 class="fw-bold">{{ request.user.username }}</h5>
+            <p class="text-muted mb-1">Roll No: {{ request.user.studentprofile.roll_number }}</p>
+            <p class="text-muted">Department: {{ request.user.studentprofile.department }}</p>
+
         </div>
     </div>
 
-    <!-- Info section -->
     <div class="col-md-8">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h4>Your Information</h4>
-                <p><strong>Department:</strong> {{ request.user.studentprofile.department }}</p>
-                <p><strong>Year of Admission:</strong> {{ request.user.studentprofile.year_of_admission }}</p>
+        <div class="card shadow-sm p-4">
+            <h4>Your Information</h4>
 
-                <a class="btn btn-primary mt-2" href="{% url 'student_profile' %}">
-                    View Full Profile
-                </a>
-            </div>
+            <p class="mt-2"><strong>Department:</strong> {{ request.user.studentprofile.department }}</p>
+            <p><strong>Year of Admission:</strong> {{ request.user.studentprofile.year_of_admission }}</p>
+
+            <a class="btn btn-primary mt-2" href="{% url 'student_profile' %}">
+                View Full Profile
+            </a>
         </div>
+
+        <div class="card shadow-sm p-4 mt-3">
+            <h4>Your Courses</h4>
+
+            <p>You are enrolled in
+                <strong>{{ request.user.studentprofile.courses.count }}</strong>
+                courses.
+            </p>
+
+            <a class="btn btn-success mt-2" href="{% url 'my_course' %}">
+                View My Courses
+            </a>
+        </div>
+
     </div>
+
 </div>
 
 {% endblock %}

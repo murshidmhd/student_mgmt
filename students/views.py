@@ -37,3 +37,9 @@ def edit_profile(request):
 
         return redirect("student_profile")
     return render(request, "edit_profile.html", {"profile": profile})
+
+
+def my_course(request):
+    student = StudentProfile.objects.get(user=request.user)
+    course = student.courses.all()
+    return render(request, "my_course.html", {"courses": course})

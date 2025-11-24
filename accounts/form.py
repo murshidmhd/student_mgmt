@@ -76,22 +76,32 @@ class EditUserForm(forms.ModelForm):
         }
 
 
-
-
 class EditProfileForm(forms.ModelForm):
+
+    DEPT_CHOICES = [
+        ("CS", "Computer Science"),
+        ("IT", "Information Technology"),
+        ("ECE", "Electronics"),
+        ("ME", "Mechanical"),
+    ]
+
+    department = forms.ChoiceField(
+        choices=DEPT_CHOICES, widget=forms.Select(attrs={"class": "form-control"})
+    )
+
     class Meta:
         model = StudentProfile
-        fields = ["roll_number", "department", "year_of_admission", "profile_image"]
+        fields = [
+            "roll_number",
+            "department",
+            "year_of_admission",
+            "profile_image",
+            "courses",
+        ]
 
         widgets = {
-            "roll_number": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Enter Roll Number"}
-            ),
-            "department": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Enter Department"}
-            ),
-            "year_of_admission": forms.NumberInput(
-                attrs={"class": "form-control", "placeholder": "Enter Year"}
-            ),
+            "roll_number": forms.TextInput(attrs={"class": "form-control"}),
+            "year_of_admission": forms.NumberInput(attrs={"class": "form-control"}),
             "profile_image": forms.FileInput(attrs={"class": "form-control"}),
+            "courses": forms.SelectMultiple(attrs={"class": "form-control"}),
         }

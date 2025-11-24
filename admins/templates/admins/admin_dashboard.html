@@ -3,12 +3,51 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-<h2>Welcome Admin 👑</h2>
 
-<div class="card shadow-sm p-3 mt-3">
-    <h4>Admin Actions</h4>
+<h2 class="fw-bold">Welcome Admin </h2>
 
-    <a class="btn btn-primary mt-2" href="#">Manage Students</a>
-    <a class="btn btn-secondary mt-2" href="#">Manage Courses</a>
+<div class="row mt-4">
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3 text-center">
+            <i class="bi bi-people-fill fs-3 text-primary"></i>
+            <h6>Total Students</h6>
+            <h3>{{ total_students }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3 text-center">
+            <i class="bi bi-journal-bookmark-fill fs-3 text-success"></i>
+            <h6>Total Courses</h6>
+            <h3>{{ total_courses }}</h3>
+        </div>
+    </div>
+
 </div>
+
+<h4 class="mt-5 mb-3">Admin Actions</h4>
+
+<div class="row">
+
+    <div class="col-md-6 mb-3">
+        <a href="{% url 'manage_students' %}" class="text-decoration-none">
+            <div class="card shadow-sm p-4 text-center bg-primary text-white">
+                <i class="bi bi-people-fill fs-3"></i>
+                <h5 class="mt-2">Manage Students</h5>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <a href="{% url 'manage_courses' %}" class="text-decoration-none">
+            <div class="card shadow-sm p-4 text-center bg-secondary text-white">
+                <i class="bi bi-journal-bookmark-fill fs-3"></i>
+                <h5 class="mt-2">Manage Courses</h5>
+            </div>
+        </a>
+    </div>
+
+</div>
+
 {% endblock %}

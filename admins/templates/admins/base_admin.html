@@ -2,71 +2,69 @@
 <html>
 
 <head>
+    <title>{% block title %}Admin Panel{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <title>
-        {% block title %}admin{% endblock %}
-    </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 
     <style>
+        .sidebar {
+            width: 240px;
+            min-height: 100vh;
+            background-color: #212529;
+            padding: 20px;
+        }
+
         .sidebar-link {
-            padding: 8px 10px;
-            border-radius: 5px;
             display: block;
+            padding: 10px 12px;
+            border-radius: 6px;
             text-decoration: none;
-            color: white;
+            color: #ffffff;
+            margin-bottom: 6px;
+            font-size: 15px;
         }
 
         .sidebar-link:hover {
-            background-color: #495057;
+            background-color: #343a40;
         }
 
         .active-link {
             background-color: #0d6efd;
-            border-radius: 5px;
         }
     </style>
-
 </head>
 
 <body>
 
     <div class="d-flex">
 
-        <!-- this is sidebar -->
-        <div class="bg-dark text-white p-3" style="width: 230px; min-height: 100vh; position: fixed;">
-            <h4 class="mb-4">Admin Panel</h4>
+        <div class="sidebar">
+            <h4 class="text-white mb-4">Admin Panel</h4>
 
             <a href="/admin-panel/dashboard/"
                 class="sidebar-link {% if request.path == '/admin-panel/dashboard/' %}active-link{% endif %}">
-                🏠 Dashboard
+                <i class="bi bi-house"></i>
+                Dashboard
             </a>
 
             <a href="/admin-panel/students/"
                 class="sidebar-link {% if '/admin-panel/students/' in request.path %}active-link{% endif %}">
-                👥 Manage Students
+                <i class="bi bi-person"></i> Manage Students
             </a>
 
             <a href="/admin-panel/courses/"
                 class="sidebar-link {% if '/admin-panel/courses/' in request.path %}active-link{% endif %}">
-                📚 Manage Courses
+                <i class="bi bi-book"></i> Manage Courses
             </a>
 
-            <a href="/admin-panel/settings/"
-                class="sidebar-link {% if '/admin-panel/settings/' in request.path %}active-link{% endif %}">
-                ⚙️ Settings
-            </a>
-
-            <a href="{% url 'logout' %}">Logout</a>
-
-
-
+            <a href="{% url 'logout' %}" class="sidebar-link mt-4">
+                <i class="bi bi-box-arrow-right"> </i>    Logout</a>
         </div>
 
-        <!-- main layout ith  -->
-        <div class="flex-grow-1 p-4" style="margin-left: 230px;">
+        <div class="flex-grow-1 p-4">
             {% block content %}{% endblock %}
         </div>
-
     </div>
 
 </body>

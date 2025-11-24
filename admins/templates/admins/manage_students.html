@@ -7,6 +7,9 @@
 <h2 class="mb-4">Manage Students</h2>
 <a class="btn btn-primary" href="{% url 'add_student' %}">Add student</a>
 
+<form method="GET" class="mb-3 mt-3" >
+    <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Search by username...">
+</form>
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">

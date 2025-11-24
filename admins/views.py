@@ -1,22 +1,39 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from accounts.models import User
 from students.models import StudentProfile, Course
 from accounts.form import EditProfileForm, EditUserForm, StudentRegisterForm
 from .form import CourseForm
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 @login_required
 def admin_dashboard(request):
+    total_students = StudentProfile.objects.count()
+    total_courses = Course.objects.count()
     if request.user.role == "admin":
-        return render(request, "admins/admin_dashboard.html")
-
+        return render(
+            request,
+            "admins/admin_dashboard.html",
+            {
+                "total_students": total_students,
+                "total_courses": total_courses,
+            },
+        )
     return redirect("login")
 
 
 def manage_students(request):
     students = User.objects.filter(role="student")
-    return render(request, "admins/manage_students.html", {"students": students})
+
+    q = request.GET.get("q")
+    if q:
+        students = students.filter(username__icontains=q)
+
+    return render(
+        request, "admins/manage_students.html", {"students": students, "q": q}
+    )
 
 
 def view_student(request, id):
@@ -36,6 +53,7 @@ def add_student(request):
             password = form.cleaned_data["password"]
             user = User.objects.create(username=username, email=email)
             user.set_password(password)
+            user.role = "student"
             user.save()
             roll_number = form.cleaned_data["roll_number"]
             department = form.cleaned_data["department"]
@@ -48,12 +66,22 @@ def add_student(request):
                 year_of_admission=year_of_admission,
             )
             userProfile.save()
+
+            send_mail(
+                subject="Welcome to Student Portal",
+                message=f"Hello {username},\n\nYour student account has been created successfully.",
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+            )
+
             return redirect("manage_students")
+        else:
+            return render(request, "admins/add_student.html", {"form": form})
 
 
 def edit_student(request, id):
     user = User.objects.get(id=id)
-    profile, created = StudentProfile.objects.get_or_create(user=user)
+    profile = StudentProfile.objects.get(user=user)
 
     if request.method == "GET":
         user_form = EditUserForm(instance=user)
@@ -74,7 +102,10 @@ def edit_student(request, id):
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
-            profile_form.save()
+            profile = profile_form.save(commit=False)
+            profile.save()
+            profile_form.save_m2m()
+
             return redirect("manage_students")
 
         return render(

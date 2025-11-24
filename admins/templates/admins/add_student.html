@@ -12,7 +12,7 @@
                     Add Student
                 </h3>
 
-                <form method="POST">
+                <form method="POST" autocomplete="off">
                     {% csrf_token %}
                     {{ form.as_p }}
 
