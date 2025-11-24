@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import User
 from students.models import StudentProfile, Course
@@ -6,41 +6,44 @@ from accounts.form import EditProfileForm, EditUserForm, StudentRegisterForm
 from .form import CourseForm
 from django.core.mail import send_mail
 from django.conf import settings
+from accounts.decorators import admin_required
 
 
+@admin_required
 @login_required
 def admin_dashboard(request):
     total_students = StudentProfile.objects.count()
     total_courses = Course.objects.count()
-    if request.user.role == "admin":
-        return render(
-            request,
-            "admins/admin_dashboard.html",
-            {
-                "total_students": total_students,
-                "total_courses": total_courses,
-            },
-        )
-    return redirect("login")
-
-
-def manage_students(request):
-    students = User.objects.filter(role="student")
-
-    q = request.GET.get("q")
-    if q:
-        students = students.filter(username__icontains=q)
-
     return render(
-        request, "admins/manage_students.html", {"students": students, "q": q}
+        request,
+        "admins/admin_dashboard.html",
+        {
+            "total_students": total_students,
+            "total_courses": total_courses,
+        },
     )
 
 
+@admin_required
+def manage_students(request):
+    students = User.objects.filter(role="student")
+
+    value = request.GET.get("value")
+    if value:
+        students = students.filter(username__icontains=value)
+
+    return render(
+        request, "admins/manage_students.html", {"students": students, "value": value}
+    )
+
+
+@admin_required
 def view_student(request, id):
     student = User.objects.get(id=id)
     return render(request, "admins/view_students.html", {"student": student})
 
 
+@admin_required
 def add_student(request):
     if request.method == "GET":
         form = StudentRegisterForm()
@@ -134,11 +137,12 @@ def manage_courses(request):
 
 def add_course(request):
     if request.method == "POST":
-        name = request.POST["name"]
-        description = request.POST["description"]
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("manage_courses")
 
-        Course.objects.create(name=name, description=description)
-        return redirect("manage_courses")
+        return render(request, "admins/add_course.html", {"form": form})
     else:
         form = CourseForm()
 

@@ -50,10 +50,10 @@ class StudentRegisterForm(forms.ModelForm):
 
         widgets = {
             "username": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Enter username"}
+                attrs={"class": "form-control", "placeholder": "Enter username"},
             ),
             "email": forms.EmailInput(
-                attrs={"class": "form-control", "placeholder": "Enter email"}
+                attrs={"class": "form-control", "placeholder": "Enter email"},
             ),
             "password": forms.PasswordInput(
                 attrs={"class": "form-control", "placeholder": "Enter password"}

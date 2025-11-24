@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
-
-
+from accounts.models import User
 
 
 class Course(models.Model):
@@ -11,8 +10,9 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+
 class StudentProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     roll_number = models.CharField(max_length=20, unique=True)
     department = models.CharField(max_length=50)
     year_of_admission = models.IntegerField()
@@ -22,4 +22,6 @@ class StudentProfile(models.Model):
     courses = models.ManyToManyField(Course, blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.roll_number}"
+        return f"{self.user.username} - {self.roll_number }"
+    
+

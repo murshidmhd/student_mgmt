@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from students.models import StudentProfile
 from django.contrib.auth.decorators import login_required
-from accounts.decorators import admin_required
 from django.contrib.auth import authenticate, login, logout
 from accounts.models import User
 from accounts.form import LoginForm, StudentRegisterForm
@@ -15,7 +14,7 @@ def register_student(request):
     if request.method == "POST":
         form = StudentRegisterForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data["username"]
+            username = form.cleaned_data.get("username")
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
 
@@ -52,6 +51,7 @@ def login_view(request):
 
     if request.method == "POST":
         form = LoginForm(request.POST)
+        
         if form.is_valid():
 
             username = form.cleaned_data["username"]
@@ -72,21 +72,9 @@ def login_view(request):
     return render(request, "login.html", {"form": form})
 
 
-@login_required
-def admin_dashboard(request):
-    if request.user.role != "admin":
-        return redirect("student_dashboard")
-
-    return render(request, "admin_dashboard.html")
-
-
 def logout_view(request):
     logout(request)
-    # messages.success(request, "Logged out successfully.")
+    messages.success(request, "You have been logged out successfully.")
     return redirect("login")
 
 
-@login_required
-@admin_required
-def admin_dashboard(request):
-    return render(request, "admin_dashboard.html")
