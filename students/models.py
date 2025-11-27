@@ -1,6 +1,10 @@
 from django.db import models
 from django.conf import settings
-from accounts.models import User
+
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Course(models.Model):
@@ -26,7 +30,7 @@ class StudentProfile(models.Model):
     )
     courses = models.ManyToManyField(Course, blank=True)
     is_active = models.BooleanField(default=True)
-    
+
     objects = models.Manager()
     active = ActiveStudentManager()
 

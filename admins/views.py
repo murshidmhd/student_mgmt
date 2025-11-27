@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from accounts.models import User
+
 from students.models import StudentProfile, Course
 from accounts.form import EditProfileForm, EditUserForm, StudentRegisterForm
 from .form import CourseForm
 from django.core.mail import send_mail
 from django.conf import settings
 from accounts.decorators import admin_required
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 @admin_required
@@ -24,7 +27,7 @@ def admin_dashboard(request):
     )
 
 
-@admin_required
+# @admin_required
 def manage_students(request):
     students = User.objects.filter(role="student")
 
@@ -168,3 +171,21 @@ def delete_course(request, id):
     course = Course.objects.get(id=id)
     course.delete()
     return redirect("manage_courses")
+
+
+from django.shortcuts import get_object_or_404, redirect
+
+
+def deactivate_student(request, id):
+    user = get_object_or_404(User, id=id)
+    user.studentprofile.is_active = False
+    user.studentprofile.save()
+    return redirect("manage_students")
+
+
+def activate_student(request, id):
+    user = get_object_or_404(User, id=id)
+    print(user)
+    user.studentprofile.is_active = True
+    user.studentprofile.save()
+    return redirect("manage_students")
